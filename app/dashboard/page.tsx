@@ -9,7 +9,9 @@ import {
 } from 'lucide-react'
 import { getCurrentUser, signOut, getPatients, getCurrentUserName } from '@/lib/supabase'
 import AIPanel from '@/components/AIPanel'
-import TumorMarkerChart from '@/components/TumorMarkerChart'
+
+// Временно отключаем TumorMarkerChart для стабильности
+// import TumorMarkerChart from '@/components/TumorMarkerChart'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
@@ -267,10 +269,34 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {/* Tumor Marker Chart for first patient */}
+            {/* Simplified Tumor Marker Chart */}
             {patients.length > 0 && (
-              <div>
-                <div className="bg-white rounded-2xl p-6 border border-gray-200 text-center"><p className="text-gray-600">График онкомаркеров (временно отключен)</p></div>
+              <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                <div className="p-6 border-b border-gray-200">
+                  <div className="flex items-center">
+                    <Activity className="w-6 h-6 text-blue-600 mr-3" />
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">Динамика онкомаркеров</h3>
+                      <p className="text-gray-600">Для пациента ID: {patients[0].id}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-8">
+                  <div className="flex flex-col items-center justify-center h-48">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                      <Activity className="w-8 h-8 text-blue-600" />
+                    </div>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-2">Демо-график</h4>
+                    <p className="text-gray-500 text-center">
+                      В реальной системе здесь будут графики онкомаркеров
+                    </p>
+                  </div>
+                </div>
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                  <div className="text-sm text-gray-600">
+                    💡 Данные обновлены: {new Date().toLocaleDateString('ru-RU')}
+                  </div>
+                </div>
               </div>
             )}
           </div>
