@@ -5,8 +5,13 @@ import type { Session, User } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// Проверяем режим
+// Проверяем режим - если URL содержит demo или ключи не настроены, используем демо-режим
 const DEMO_MODE = !supabaseUrl || supabaseUrl.includes('demo') || !supabaseAnonKey
+
+// Логирование режима
+if (typeof window !== 'undefined' && DEMO_MODE) {
+  console.log('🔧 OnkoAI Demo Mode: Using mock authentication and data')
+}
 
 // Демо-данные
 const DEMO_DATA = {
@@ -86,7 +91,7 @@ const DEMO_DATA = {
 }
 
 // Создаем клиент Supabase
-export const supabase = createClient(
+const supabaseClient = createClient(
   supabaseUrl || 'https://demo-supabase.co',
   supabaseAnonKey || 'demo-key-only-for-development',
   {
@@ -104,6 +109,58 @@ export const supabase = createClient(
     },
   }
 )
+
+// Переопределяем методы Supabase в демо-режиме
+if (DEMO_MODE) {
+  // Сохраняем оригинальные методы
+  const originalAuth = { ...supabaseClient.auth }
+  
+  // Переопределяем signInWithPassword для демо-режима
+  supabaseClient.auth.signInWithPassword = async ({ email, password }: any) => {
+    console.log(`🎭 Demo login attempt: ${email}`)
+    
+    // В демо-режиме ВСЕГДА успешный вход
+    return {
+      data: {
+        user: {
+          ...DEMO_DATA.user,
+          email: email || DEMO_DATA.user.email,
+          user_metadata: {
+            ...DEMO_DATA.user.user_metadata,
+            name: email.includes('admin') ? 'Администратор' : 'Доктор Иванов',
+            role: email.includes('admin') ? 'admin' : 'doctor'
+          }
+        },
+        session: DEMO_DATA.session,
+      },
+      error: null,
+    }
+  }
+  
+  // Переопределяем getSession
+  supabaseClient.auth.getSession = async () => {
+    return {
+      data: { session: DEMO_DATA.session },
+      error: null,
+    }
+  }
+  
+  // Переопределяем getUser
+  supabaseClient.auth.getUser = async () => {
+    return {
+      data: { user: DEMO_DATA.user },
+      error: null,
+    }
+  }
+  
+  // Переопределяем signOut
+  supabaseClient.auth.signOut = async () => {
+    console.log('🎭 Demo logout')
+    return { error: null }
+  }
+}
+
+export const supabase = supabaseClient
 
 // Вспомогательные функции
 export const getSession = async (): Promise<Session | null> => {
@@ -145,36 +202,12 @@ export const getCurrentUser = async (): Promise<User | null> => {
 }
 
 export const signIn = async (email: string, password: string) => {
-  if (DEMO_MODE) {
-    // Демо-вход всегда успешен
-    console.log(`🎭 Demo login: ${email}`)
-    return {
-      data: {
-        user: {
-          ...DEMO_DATA.user,
-          email: email || DEMO_DATA.user.email,
-          user_metadata: {
-            ...DEMO_DATA.user.user_metadata,
-            name: email.includes('admin') ? 'Администратор' : 'Доктор Иванов'
-          }
-        },
-        session: DEMO_DATA.session,
-      },
-      error: null,
-    }
-  }
-  
+  // Всегда используем переопределенный метод в демо-режиме
   return await supabase.auth.signInWithPassword({ email, password })
 }
 
 export const signOut = async () => {
-  if (!DEMO_MODE) {
-    return await supabase.auth.signOut()
-  }
-  
-  // В демо-режиме просто логируем выход
-  console.log('🎭 Demo logout')
-  return { error: null }
+  return await supabase.auth.signOut()
 }
 
 // Функция для получения пациентов
