@@ -43,25 +43,19 @@ export default function LoginPage() {
       
       const userRole = data.user.user_metadata?.role || formData.role
       
-      // Проверяем соответствие выбранной роли
-      if (userRole !== formData.role) {
-        // Если пользователь существует но с другой ролью, все равно пускаем
-        console.log(`Пользователь найден с ролью: ${userRole}, выбрана: ${formData.role}`)
-      }
-      
       setSuccess(true)
       
       // Перенаправление в зависимости от роли
       setTimeout(() => {
-        switch(formData.role) {
+        switch(userRole) {
           case 'doctor':
-            router.push('/doctor')
+            router.push('/dashboard') // Изменяем с /doctor на /dashboard
             break
           case 'patient':
-            router.push('/patient')
+            router.push('/patient-dashboard') // Создадим новую страницу
             break
           case 'admin':
-            router.push('/admin')
+            router.push('/admin-dashboard') // Создадим новую страницу
             break
           default:
             router.push('/dashboard')
