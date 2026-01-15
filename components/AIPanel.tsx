@@ -43,11 +43,13 @@ const DEMO_RECOMMENDATIONS = [
   }
 ]
 
+// Определяем интерфейс для пропсов
 interface AIPanelProps {
-  patientId: string
+  patientId: string;
 }
 
-export default function AIPanel({ patientId }: AIPanelProps) {
+export default function AIPanel(props: AIPanelProps) {
+  const { patientId } = props;
   const [recommendations, setRecommendations] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedRec, setSelectedRec] = useState<any>(null)
