@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { getCurrentUser, signOut, getPatients, getCurrentUserName } from '@/lib/supabase'
 import AIPanel from '@/components/AIPanel'
-// import TumorMarkerChart from "@/components/TumorMarkerChart"
+import TumorMarkerChart from '@/components/TumorMarkerChart'
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
