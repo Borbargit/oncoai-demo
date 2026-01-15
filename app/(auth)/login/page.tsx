@@ -49,18 +49,17 @@ export default function LoginPage() {
       setTimeout(() => {
         switch(userRole) {
           case 'doctor':
-            router.push('/dashboard') // Изменяем с /doctor на /dashboard
+            router.push('/dashboard')
             break
           case 'patient':
-            router.push('/patient-dashboard') // Создадим новую страницу
+            router.push('/patient-dashboard')
             break
           case 'admin':
-            router.push('/admin-dashboard') // Создадим новую страницу
+            router.push('/admin-dashboard')
             break
           default:
             router.push('/dashboard')
         }
-        router.refresh()
       }, 1000)
       
     } catch (err: any) {
