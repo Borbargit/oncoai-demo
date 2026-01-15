@@ -1,4 +1,6 @@
 'use client'
+import { LivePatientsStats } from './live-data'
+import SupabaseStatusBadge from '@/components/SupabaseStatusBadge'
 
 import { useState } from 'react'
 import { 
