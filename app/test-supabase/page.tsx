@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { 
-  supabase, 
   getPatients, 
   getSession, 
   isDemoMode, 
@@ -87,7 +86,7 @@ export default function TestSupabasePage() {
             <Database className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Тест подключения Supabase</h1>
-          <p className="text-gray-600">Проверка конфигурации и данных системы OnkoAI</p>
+          <p className="text-gray-600">Демо-режим: Используются тестовые данные</p>
         </div>
 
         {/* Status Cards */}
@@ -113,13 +112,13 @@ export default function TestSupabasePage() {
             </div>
             {session ? (
               <div>
-                <p className="font-medium text-gray-900">{session.user?.email}</p>
-                <p className="text-sm text-gray-600">Сессия активна</p>
+                <p className="font-medium text-gray-900">{session.user?.email || 'demo@onkoai.com'}</p>
+                <p className="text-sm text-gray-600">Сессия активна (демо)</p>
               </div>
             ) : (
               <div>
-                <p className="text-gray-600">Не авторизован</p>
-                <p className="text-sm text-gray-500">Используется демо-пользователь</p>
+                <p className="text-gray-600">Демо-пользователь</p>
+                <p className="text-sm text-gray-500">Используются тестовые данные</p>
               </div>
             )}
           </div>
@@ -130,7 +129,7 @@ export default function TestSupabasePage() {
               <h3 className="text-lg font-semibold">Данные</h3>
             </div>
             <p className="text-2xl font-bold text-gray-900">{patients.length}</p>
-            <p className="text-gray-600">пациентов загружено</p>
+            <p className="text-gray-600">пациентов загружено (демо)</p>
           </div>
         </div>
 
@@ -138,7 +137,7 @@ export default function TestSupabasePage() {
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-900">Тестовые данные пациентов</h2>
-            <p className="text-gray-600">Данные из {isDemoMode() ? 'демо-режима' : 'Supabase базы данных'}</p>
+            <p className="text-gray-600">Данные из демо-режима</p>
           </div>
           
           <div className="overflow-x-auto">
@@ -197,7 +196,7 @@ export default function TestSupabasePage() {
           {loading && (
             <div className="p-8 text-center">
               <div className="inline-block w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="mt-2 text-gray-500">Загрузка данных...</p>
+              <p className="mt-2 text-gray-500">Загрузка демо-данных...</p>
             </div>
           )}
         </div>
@@ -207,36 +206,36 @@ export default function TestSupabasePage() {
           <h3 className="text-xl font-bold mb-4">Техническая информация</h3>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold mb-3 text-gray-300">Конфигурация Supabase</h4>
+              <h4 className="font-semibold mb-3 text-gray-300">Конфигурация</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Версия клиента:</span>
-                  <span className="font-mono">@supabase/supabase-js@2.90.1</span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-gray-400">Режим:</span>
-                  <span>{isDemoMode() ? 'Демонстрационный' : 'Продакшн'}</span>
+                  <span className="text-green-400">Демонстрационный</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Переменные окружения:</span>
-                  <span>{connectionInfo?.hasCredentials ? 'Настроены' : 'Не настроены'}</span>
+                  <span className="text-gray-400">Аутентификация:</span>
+                  <span>Демо (всегда успешна)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Данные:</span>
+                  <span>Тестовые (в памяти)</span>
                 </div>
               </div>
             </div>
             <div>
-              <h4 className="font-semibold mb-3 text-gray-300">Инструкции</h4>
+              <h4 className="font-semibold mb-3 text-gray-300">Особенности</h4>
               <ul className="space-y-2 text-sm text-gray-300">
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
-                  <span>Для перехода в продакшн обновите .env.local</span>
+                  <span>Работает без интернета</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
-                  <span>Добавьте реальные Supabase ключи</span>
+                  <span>Любой логин/пароль работают</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
-                  <span>Перезапустите сервер разработки</span>
+                  <span>Идеально для демонстраций</span>
                 </li>
               </ul>
             </div>
