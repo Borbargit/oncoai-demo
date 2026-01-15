@@ -270,7 +270,7 @@ export default function DashboardPage() {
             {/* Tumor Marker Chart for first patient */}
             {patients.length > 0 && (
               <div>
-                {/* <TumorMarkerChart patientId={patients[0].id} /> */}
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 text-center"><p className="text-gray-600">График онкомаркеров (временно отключен)</p></div>
               </div>
             )}
           </div>
